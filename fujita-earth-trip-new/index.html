@@ -219,6 +219,16 @@
 @media(max-height:650px) and (max-width:650px){.picture-side{flex-basis:43%}.text-side{padding-top:6px}.prose{font-size:clamp(15px,4vw,17px);line-height:1.58}}
 @media(prefers-reduced-motion:reduce){.book.turning .page-turn{transition:none!important}}
 
+
+/* Location-based page turning: the diary title is revealed in the study. */
+.book.journey-title .prose{
+  text-align:center;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+  font-size:clamp(19px,2.4vw,27px);line-height:1.9;
+}
+.book.journey-title .chapter{visibility:hidden}
+@media(max-width:650px){
+  .book.journey-title .prose{font-size:clamp(18px,4.6vw,23px);line-height:1.8}
+}
 </style>
 </head>
 <body>
@@ -443,11 +453,14 @@
     display([L('ありがとう。この本、まだ書きかけなんです。','ふじた'),L('続きを、いっしょに書いてもらえますか？','ふじた')],'ひらいた 本に ふれてみよう。');
   }
   function titlePage(){
-    phase='title';sceneClass('page-title');chapter.textContent='';
+    // The story is still in Fujita's study: reveal the diary's title
+    // without changing the room or turning a physical page.
+    phase='title';sceneClass('page-journal');book.classList.add('journey-title');chapter.textContent='';
     display([L('これは、\nふじた地球旅行記の、\nはじまりのものがたり。')]);
   }
   function rocketPage(){
-    phase='rocket';p05Step=0;sceneClass('page-rocket');chapter.textContent='ちきゅうへ';
+    // The first actual change of place: the diary's study -> the rocket.
+    phase='rocket';p05Step=0;book.classList.remove('journey-title');sceneClass('page-rocket');chapter.textContent='ちきゅうへ';
     display([L('生徒が、紙を両手で持って、読みあげます。'),L('月の決まり、その1。深く考えないこと。','生徒')]);
   }
   function rocketNext(){
@@ -460,19 +473,21 @@
       if(helloStep===0){
         helloStep=1;
         setLines([L('思い出すと、あれも、これも、書きたくなって……','ふじた'),L('……は、は……','ふじた')]);
-        setNote('タップすると、つぎのページに すすみます。');
+        setNote('ふじたが なにか いいたそう…… タップで つづく。');
         showTapAdvance(true);
         return;
       }
       sneeze();
       return;
     }
-    if(phase==='gathered'){turnTo(rumble);return;}
-    if(phase==='rumble'){turnTo(journal);return;}
-    if(phase==='journal'){turnTo(titlePage);return;}
+    // A tap inside the same location changes the scene's events/words only.
+    // The illustrated page is turned ONLY when the place changes.
+    if(phase==='gathered'){rumble();return;}
+    if(phase==='rumble'){journal();return;}
+    if(phase==='journal'){titlePage();return;}
     if(phase==='title'){turnTo(rocketPage);return;}
     if(phase==='rocket'){
-      if(p05Step===0){turnTo(rocketNext);return;}
+      if(p05Step===0){rocketNext();return;}
       closeBook();
     }
   }
