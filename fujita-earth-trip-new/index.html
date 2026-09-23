@@ -210,12 +210,12 @@
 }
 .book.turning .page-turn>.turn-face{pointer-events:none!important}
 @media(max-width:650px){
-  .picture-side{flex:0 0 46%;margin:7px 8px 0;border-radius:4px}
+  .picture-side{flex:0 0 50%;margin:7px 8px 0;border-radius:4px}
   .text-side{min-height:0;padding:9px 21px calc(14px + env(safe-area-inset-bottom));overflow-y:auto}
   .prose{font-size:clamp(17px,4.25vw,19px);line-height:1.72;gap:7px}
   .page-note{font-size:clamp(12px,3vw,14px);line-height:1.6;margin-top:10px}
 }
-@media(max-width:359px){.picture-side{flex-basis:44%}.text-side{padding:7px 18px 12px}.prose{font-size:16px;line-height:1.64}}
+@media(max-width:359px){.picture-side{flex-basis:46%}.text-side{padding:7px 18px 12px}.prose{font-size:16px;line-height:1.64}}
 @media(max-height:650px) and (max-width:650px){.picture-side{flex-basis:43%}.text-side{padding-top:6px}.prose{font-size:clamp(15px,4vw,17px);line-height:1.58}}
 @media(prefers-reduced-motion:reduce){.book.turning .page-turn{transition:none!important}}
 
@@ -414,7 +414,7 @@
     originals.forEach((node,i)=>{
       const computed=getComputedStyle(node),copy=copies[i];
       if(!copy)return;
-      ['display','visibility','opacity','transform','text-align','font-size','line-height','background'].forEach(prop=>{
+      ['display','visibility','opacity','transform','text-align','font-size','font-family','line-height','background','flex-direction','align-items','justify-content','gap','flex-basis'].forEach(prop=>{
         copy.style.setProperty(prop,computed.getPropertyValue(prop));
       });
     });
