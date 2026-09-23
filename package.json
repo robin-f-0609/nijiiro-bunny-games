@@ -1,0 +1,13 @@
+{
+  "name": "nijiiro-bunny-games",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/reader.mjs",
+    "test:dom": "node tests/dom.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1",
+    "happy-dom": "20.14.5"
+  }
+}

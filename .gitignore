@@ -1,0 +1,6 @@
+node_modules/
+test-results/
+playwright-report/
+dist/
+fujita-earth-trip/preview-local.html
+fujita-earth-trip/preview-bundle.js

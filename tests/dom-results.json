@@ -1,0 +1,69 @@
+{
+  "suite": "DOM events only; no visual browser assertions",
+  "results": [
+    {
+      "test": "full route and replay",
+      "sea": "umi",
+      "rain": "drops",
+      "individual": false,
+      "pages": 51,
+      "passed": true
+    },
+    {
+      "test": "full route and replay",
+      "sea": "umi",
+      "rain": "hat",
+      "individual": true,
+      "pages": 51,
+      "passed": true
+    },
+    {
+      "test": "full route and replay",
+      "sea": "umi",
+      "rain": "three",
+      "individual": false,
+      "pages": 51,
+      "passed": true
+    },
+    {
+      "test": "full route and replay",
+      "sea": "bath",
+      "rain": "drops",
+      "individual": false,
+      "pages": 51,
+      "passed": true
+    },
+    {
+      "test": "full route and replay",
+      "sea": "bath",
+      "rain": "hat",
+      "individual": true,
+      "pages": 51,
+      "passed": true
+    },
+    {
+      "test": "full route and replay",
+      "sea": "bath",
+      "rain": "three",
+      "individual": false,
+      "pages": 51,
+      "passed": true
+    },
+    {
+      "test": "reveal-only tap and transition double-tap guard",
+      "passed": true
+    },
+    {
+      "test": "back, choice replacement, dependent memories and nonaccumulating meter, resume",
+      "passed": true
+    },
+    {
+      "test": "completed collection resumes; invalid saves and unavailable storage",
+      "passed": true
+    },
+    {
+      "test": "image failure fallback, silent rainbow page remains manually navigable",
+      "passed": true
+    }
+  ]
+}
