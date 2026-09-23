@@ -123,8 +123,7 @@
 .book.page-ending .finished-note{opacity:1;transform:none}
 .book.page-journal .spread,.book.page-rumble .spread,.book.page-title .spread,.book.page-rocket .spread{cursor:pointer}
 @media(max-width:650px){
- .page-turn{inset:48% 0 0 0;transform-origin:center top}
- @keyframes turnSheet{0%{opacity:0;transform:perspective(900px) rotateX(0)}10%,88%{opacity:1}100%{opacity:0;transform:perspective(900px) rotateX(150deg)}}
+ /* Mobile and desktop now share the same left-bound page leaf. */
  .rumble-word{top:38%;left:29%;font-size:clamp(25px,6.4vw,36px)}
  .rule-slip{bottom:3%;padding:6px 9px;font-size:clamp(9px,2.2vw,12px)}
  .book.page-title .prose{font-size:clamp(18px,4.6vw,25px);line-height:1.9}
@@ -133,21 +132,52 @@
 @media(max-width:359px){.symbol-book{height:32%}}
 
 
-/* 紙面全体を覆う2Dのページ切替に変更：裏の茶色い台紙を露出させない。 */
-.book:before{background:#f8efde;border-color:#d6c4a6}
+/* P01〜P04: one consistent page-leaf animation, with opaque paper on BOTH faces. */
+.book:before{inset:0;background:#fff8e7;border-color:#d6c4a6;transform:none;box-shadow:inset 0 0 12px #a78e6025}
 .book.open .spread{opacity:1;transition:transform .25s ease,opacity 0s}
-.page-turn{inset:0!important;transform:none!important;transform-origin:center!important;backface-visibility:visible;background:linear-gradient(100deg,#efe0c6,#fff9ed 13%,#fffaf1 88%,#f0dfc2)!important;box-shadow:inset 3px 0 7px #aa967019!important;clip-path:inset(0 0 0 100%);border-radius:inherit}
-.book.turning .page-turn{animation:sheetSlide .64s ease-in-out both!important}
-@keyframes sheetSlide{0%{opacity:0;clip-path:inset(0 0 0 100%)}10%{opacity:1}48%,52%{opacity:1;clip-path:inset(0 0 0 0)}90%{opacity:1}100%{opacity:0;clip-path:inset(0 100% 0 0)}}
-@media(max-width:650px){
- .page-turn{inset:0!important;transform:none!important}
- .prose{font-size:clamp(17px,4.7vw,20px);line-height:1.81;gap:9px}
- .text-side{padding-top:clamp(14px,2.4dvh,25px);padding-left:23px;padding-right:23px}
- .page-note{font-size:clamp(12px,3.1vw,14px);color:#795e3e;line-height:1.65;margin-top:10px}
- .tap-advance{font-size:12px;line-height:1.7;margin-top:4px}
- .picture-side{flex-basis:47%}
+.page-turn{
+  position:absolute;inset:0 0 0 50%;z-index:6;pointer-events:none;opacity:0;
+  background:transparent!important;box-shadow:none!important;clip-path:none!important;
+  transform-origin:left center!important;transform:perspective(1200px) rotateY(0deg)!important;
+  transform-style:preserve-3d;-webkit-transform-style:preserve-3d;
+  backface-visibility:visible;-webkit-backface-visibility:visible;
+  border-radius:0 10px 10px 0
 }
-@media(max-width:359px){.prose{font-size:16px;line-height:1.72;gap:6px}.text-side{padding-top:10px;padding-left:19px;padding-right:19px}.picture-side{flex-basis:44%}}
+.page-turn::before,.page-turn::after{
+  content:"";position:absolute;inset:0;display:block;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:inherit;
+  background:linear-gradient(100deg,#e8d6b9 0%,#fff9e9 13%,#fffaf0 88%,#e6d3b1 100%);
+  box-shadow:inset 6px 0 10px #94774c20
+}
+.page-turn::after{
+  transform:rotateY(180deg);-webkit-transform:rotateY(180deg);
+  background:linear-gradient(100deg,#ecdfc8,#fff9ed 14%,#fff9e9 88%,#e5d1af)
+}
+.book.turning .page-turn{animation:paperLeaf .72s cubic-bezier(.24,.68,.24,1) both!important}
+@keyframes paperLeaf{
+  0%{opacity:0;transform:perspective(1200px) rotateY(0deg)}
+  5%{opacity:1}
+  49%{opacity:1;transform:perspective(1200px) rotateY(-87deg)}
+  51%{opacity:1;transform:perspective(1200px) rotateY(-93deg)}
+  96%{opacity:1}
+  100%{opacity:0;transform:perspective(1200px) rotateY(-178deg)}
+}
+.book.turning .spread{pointer-events:none}
+.book.page-ending.reading-pending .close-book{display:none}
+@media(max-width:650px){
+  .page-turn{inset:0!important;transform-origin:left center!important;border-radius:inherit}
+  .picture-side{flex:0 0 37%;margin:8px 10px 0}
+  .text-side{min-height:0;padding:8px 20px calc(12px + env(safe-area-inset-bottom));overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+  .prose{font-size:clamp(16px,4.1vw,18px);line-height:1.74;gap:7px}
+  .page-note{font-size:clamp(11px,2.9vw,13px);line-height:1.65;margin-top:9px}
+  .tap-advance{font-size:12px;line-height:1.65;margin-top:4px}
+}
+@media(max-width:359px){.picture-side{flex-basis:34%}.text-side{padding:7px 17px 10px}.prose{font-size:16px;line-height:1.64;gap:6px}}
+@media(max-height:650px) and (max-width:650px){
+  .picture-side{flex-basis:32%}.text-side{padding-top:6px}
+  .prose{font-size:clamp(14px,3.9vw,16px);line-height:1.58;gap:5px}
+}
 @media(prefers-reduced-motion:reduce){.book.turning .page-turn{animation-duration:.01ms!important}}
 
 </style>
@@ -266,10 +296,36 @@
   const pencil=document.getElementById('pencilTarget');
   const cue=document.getElementById('sceneCue');
   const scene=document.getElementById('scene');
+  const textSide=document.querySelector('.text-side');
   const papers=[...document.querySelectorAll('.paper')];
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let phase='cover',found=0,sequence=0,helloStep=0,p05Step=0,turning=false;
-  function showTapAdvance(show){if(!tapAdvance)return;tapAdvance.classList.toggle('show',!!show);}
+  let readReady=true,advanceRequested=false,readRevision=0,readTimer=0,suppressClickUntil=0;
+  function showTapAdvance(show){
+    advanceRequested=!!show;
+    if(tapAdvance)tapAdvance.classList.toggle('show',advanceRequested&&readReady);
+  }
+  function setReadingReady(ready){
+    readReady=ready;
+    book.classList.toggle('reading-pending',!ready);
+    if(tapAdvance)tapAdvance.classList.toggle('show',advanceRequested&&ready);
+  }
+  function atReadingEnd(){return textSide.scrollTop+textSide.clientHeight>=textSide.scrollHeight-8;}
+  function measureReading(revision){
+    if(revision!==readRevision)return;
+    clearTimeout(readTimer);
+    if(textSide.scrollHeight<=textSide.clientHeight+4){setReadingReady(true);return;}
+    setReadingReady(false);
+    if(!atReadingEnd())return;
+    readTimer=setTimeout(()=>{
+      if(revision===readRevision&&atReadingEnd())setReadingReady(true);
+    },700);
+  }
+  function restartReading(){
+    const revision=++readRevision;
+    clearTimeout(readTimer);setReadingReady(false);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>measureReading(revision)));
+  }
   function setNote(text){if(tapAdvance && tapAdvance.parentElement===note){ note.childNodes[0] ? note.childNodes[0].textContent=text : note.prepend(document.createTextNode(text)); } else { note.textContent=text; }}
   function setLines(lines){
     prose.replaceChildren();
@@ -281,6 +337,8 @@
       if(entry.who){const w=document.createElement('span');w.className='who';w.textContent=entry.who+'　';p.append(w);}
       p.append(document.createTextNode(entry.text));prose.append(p);
     });
+    textSide.scrollTop=0;
+    restartReading();
   }
   const L=(text,who)=>({text,who,kind:who?'dialogue':'narration'});
   function openBook(){if(phase!=='cover')return;phase='intro';book.classList.add('open');spread.setAttribute('aria-hidden','false');cover.disabled=true;stageCaption.classList.add('is-hidden');setLines([L('とん、とん、とん。\nえんぴつで、頭をたたいている人がいます。')]);setNote('えんぴつに ふれると、つづきが よめます。');showTapAdvance(false);}
@@ -298,13 +356,13 @@
   function sceneClass(name){book.classList.remove('page-rumble','page-journal','page-title','page-rocket','page-ending');if(name)book.classList.add(name);}
   function turnTo(callback){
     if(turning)return;
-    turning=true;book.classList.add('turning');
-    setTimeout(()=>{
-      callback();
-      setTimeout(()=>{book.classList.remove('turning');turning=false;},reduced?0:340);
-    },reduced?0:300);
+    turning=true;
+    if(reduced){callback();turning=false;return;}
+    book.classList.add('turning');
+    setTimeout(callback,360);
+    setTimeout(()=>{book.classList.remove('turning');turning=false;},760);
   }
-  function display(values,tip='',next=true){setLines(values);hint(tip,next);document.querySelector('.text-side').scrollTop=0;}
+  function display(values,tip='',next=true){setLines(values);hint(tip,next);}
   function rumble(){
     phase='rumble';sceneClass('page-rumble');
     display([L('ぐううう。'),L('……おなかの音も、書かなくていいですね。','ふじた')]);
@@ -375,13 +433,26 @@
     closeBookButton.disabled=true;backCover.tabIndex=0;setNote('');stageCaption.textContent='うらびょうしに ふれると、もういちど';stageCaption.classList.remove('is-hidden');
   }
   cover.addEventListener('click',openBook);
-  closeBookButton.addEventListener('click',closeBook);
+  closeBookButton.addEventListener('click',()=>{if(readReady)closeBook();});
   backCover.addEventListener('click',()=>{if(phase==='closed')location.reload();});
   pencil.addEventListener('click',greet);
   pencil.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();greet();}});
   papers.forEach(p=>p.addEventListener('click',()=>collect(p)));
+  textSide.addEventListener('scroll',()=>measureReading(readRevision),{passive:true});
+  let touchX=0,touchY=0,touchMoved=false;
+  textSide.addEventListener('touchstart',e=>{
+    if(e.touches.length!==1)return;
+    touchX=e.touches[0].clientX;touchY=e.touches[0].clientY;touchMoved=false;
+  },{passive:true});
+  textSide.addEventListener('touchmove',e=>{
+    if(e.touches.length!==1)return;
+    if(Math.abs(e.touches[0].clientY-touchY)>9||Math.abs(e.touches[0].clientX-touchX)>9)touchMoved=true;
+  },{passive:true});
+  textSide.addEventListener('touchend',()=>{
+    if(touchMoved)suppressClickUntil=performance.now()+700;
+  },{passive:true});
   spread.addEventListener('click',e=>{
-    if(e.target.closest('#pencilTarget,.paper,#closeBook')||turning)return;
+    if(e.target.closest('#pencilTarget,.paper,#closeBook')||turning||!readReady||performance.now()<suppressClickUntil)return;
     advanceStory();
   });
 })();
