@@ -58,7 +58,7 @@
 
 確認はローカルHTTPサーバー上で行う。例：`python -m http.server 4173` をリポジトリ直下で実行し、`http://localhost:4173/fujita-earth-trip/` を開く。
 
-DOMによる機能検証は `npm install` の後 `npm run test:dom`。ブラウザーの経路テストは `npx playwright install chromium` の後 `npm test`。HTTPサーバーを起動しておくこと。`TEST_URL` と `TEST_ARTIFACTS` で対象URLと検証画像の出力先を変更可能。今回実際に完了したのはDOM検証で、ブラウザー検証は未実行。
+DOMによる機能検証は `npm install` の後 `npm run test:dom`。ブラウザーの経路テストは `npx playwright install chromium` の後 `npm test`。HTTPサーバーを起動しておくこと。`TEST_URL` と `TEST_ARTIFACTS` で対象URLと検証画像の出力先を変更可能。GitHub Actionsでブラウザー検証も完了し、全6経路が合格した。
 
 `scripts/build-offline.py` で画像・コードを内蔵した試遊用HTMLを生成できる。試遊版では本棚も同じファイル内に含め、ネット接続なしで戻れるようにしている。
 

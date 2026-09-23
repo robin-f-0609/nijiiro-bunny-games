@@ -20,15 +20,16 @@
 
 `tests/dom-results.json` に実行結果を保存。`npm run test:dom` で再実行できる。
 
+## 公開後の確認
+
+- GitHub Pagesの [絵本](https://robin-f-0609.github.io/nijiiro-bunny-games/fujita-earth-trip/) と [本棚](https://robin-f-0609.github.io/nijiiro-bunny-games/) の表示と、公開ブラウザでの紙拾い・手動のページ送りを確認。
+- GitHub Actions [Interactive picture book checks](https://github.com/robin-f-0609/nijiiro-bunny-games/actions/runs/35835026126) 成功。Chromiumの390×844pxで海2択×雨3択の全6経路を各51ページ、画像読み込み失敗時の1経路を各51ページ確認。横はみ出しなし。
+- 320×568pxと844×390pxで拡大文字時にも本文が縦にスクロールでき、操作ボタンに到達できることを確認。戻る・選択変更・再開・音切替・二重タップ・保存不能もブラウザ検証済み。
+- GitHub Pagesの自動デプロイ成功。画像を使用したスマートフォン幅のP01・P07などのスクリーンショットも上記Actionsの `reader-checks` に保存。
+
 ## 未実施
 
-- ブラウザーによるCSS描画・スマホの画面サイズ・拡大時の目視確認。
 - 音の実聴、iOS Safari／Android Chromeの実機確認。
 - 子ども・親子による試読、読了時間の測定。
-- GitHub Pages公開URLでの動作確認。
 
-理由：ローカルブラウザー用実行環境の取得が失敗し、クラウドブラウザーではローカルHTTPとファイルURLが許可されなかった。また、GitHubのバックアップブランチ作成が接続アプリの権限不足（403 Resource not accessible by integration）で拒否され、確認用ページの反映も行っていない。
-
-`tests/reader.mjs` はブラウザー検証用に用意済みだが、この環境では未実行。GitHub Actionsの `.github/workflows/reader.yml` も未登録・未実行。これらを「合格」と扱わない。
-
-実装には縦スクロール、拡大文字、画像代替、音なし進行、動きを減らす設定への対応を含む。描画・実機の確認が終わるまでは試遊版として扱う。
+実装には縦スクロール、拡大文字、画像代替、音なし進行、動きを減らす設定への対応を含む。スマートフォン実機での確認は別途必要。

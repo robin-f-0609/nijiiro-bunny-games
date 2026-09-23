@@ -12,13 +12,15 @@
 
 ## 状態
 
-**ローカルで実装済み・公開未反映。** 2026-09-23、GitHubの接続アプリがブランチ作成を403で拒否したため、公開リポジトリは変更していません。
+**GitHub Pagesで公開済み。** スマートフォンではファイルのプレビューではなく、下記の公開URLをブラウザで開いてください。
 
-全6経路などのDOMによる機能検証は合格。ブラウザーの描画、音の実聴、スマホ実機、子どもによる試読は未確認です。詳しくは [検証結果](docs/validation.md) を参照してください。
+全6経路のDOM検証とChromiumのスマートフォン幅（390px）での51ページ踏破が合格。320px幅・横向き・拡大文字の操作も確認しています。iOS Safari／Android Chromeの実機と子どもによる試読は未確認です。詳しくは [検証結果](docs/validation.md) を参照してください。
 
 ## 開く
 
-配布された `fujita-white-page-play.html` は画像とコードを内蔵した試遊用ファイルです。ダウンロードしてブラウザーで開けます。ファイルのプレビュー画面ではJavaScriptが動かない場合があるため、その場合は保存してブラウザーで開いてください。
+スマートフォンでは [おはなしのほんだな](https://robin-f-0609.github.io/nijiiro-bunny-games/) か [絵本を直接ひらく](https://robin-f-0609.github.io/nijiiro-bunny-games/fujita-earth-trip/) をブラウザで開いてください。ホーム画面に追加すると、次回からそこから開けます。
+
+`fujita-white-page-play.html` は開発用のオフライン試遊ファイルです。スマートフォンのファイルプレビューではJavaScriptが動作しない場合があるため、スマートフォンへの配布には上記のHTTPSリンクを使ってください。
 
 ソースを開く場合は、このフォルダで次を実行します。
 
@@ -48,12 +50,12 @@ npx playwright install chromium
 npm test
 ```
 
-GitHub Actions用の設定も同梱しています。現時点では未登録・未実行です。
+GitHub Actionsでは公開時にDOM検証とブラウザ検証を実行します。
 
 ## GitHubへの反映
 
 対象は `robin-f-0609/nijiiro-bunny-games` のみ。公式サイト `nijiiro-bunny-website`、Cloudflare、独自ドメインを変更しません。
 
-既存mainを読み直し、変更がある場合は取り込んだうえで、この一式をコミットします。ゲーム入口 `fujita-earth-trip/` は維持します。GitHub Pages公開後に、表示・全6経路・音・戻る・文字拡大をブラウザーで確認してください。元のゲームはGit履歴から復元できます。
+旧版は `backup/before-white-page-20260923` ブランチに保存しました。ゲーム入口 `fujita-earth-trip/` は維持しています。GitHub Pagesの公開結果と自動検証結果は [検証結果](docs/validation.md) に記録しました。
 
 `docs/assets.md` に原本の出典を記録しています。作品本文・画像を汎用OSSライセンスへ変更するものではありません。
