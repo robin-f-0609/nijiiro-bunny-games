@@ -237,7 +237,7 @@
   font-size:clamp(22px,3.1vw,36px);font-weight:500;line-height:2.2;
   letter-spacing:.14em;color:#586c70;text-shadow:0 0 18px #7ea2aa3d;white-space:pre;
 }
-.book.page-title .line{animation:titleWhisper 1.35s cubic-bezier(.2,.72,.15,1) both}
+.book.page-title .line{animation:titleWhisper 1.55s cubic-bezier(.2,.72,.15,1) both}
 .book.page-title .chapter,.book.page-title .page-note,.book.page-title .bookmark,
 .book.page-title .finished-note,.book.page-title .close-book,.book.page-title .bottom-flourish{display:none!important}
 @keyframes titleWhisper{
@@ -389,6 +389,7 @@
   const papers=[...document.querySelectorAll('.paper')];
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let phase='cover',found=0,sequence=0,helloStep=0,turning=false;
+  let titleReady=true,titleTimer=0;
   let readReady=true,advanceRequested=false,readRevision=0,readTimer=0,suppressClickUntil=0;
   function showTapAdvance(show){
     advanceRequested=!!show;
@@ -498,8 +499,16 @@
   }
   function titlePage(){
     phase='title';sceneClass('page-title');chapter.textContent='';
-    spread.setAttribute('aria-label','ふじたちきゅうりょこうきの、はじまりのものがたり。');
-    display([L('ふじたちきゅうりょこうきの、\nはじまりのものがたり。')],'',true);
+    spread.setAttribute('aria-label','これは、ふじたちきゅう旅行記の、はじまりのものがたり');
+    titleReady=false;clearTimeout(titleTimer);
+    display([L('これは、'),L('ふじたちきゅう旅行記の、'),L('はじまりのものがたり')],'',false);
+    const titleLines=[...prose.querySelectorAll('.line')];
+    const revealDelays=[450,2550,4650];
+    titleLines.forEach((line,i)=>{
+      line.style.animationDelay=reduced?'0ms':`${revealDelays[i]}ms`;
+    });
+    if(reduced){titleReady=true;return;}
+    titleTimer=setTimeout(()=>{titleReady=true;},revealDelays[revealDelays.length-1]+1650);
   }
   function seaPage(){
     phase='sea';sceneClass('page-sea');chapter.textContent='';
@@ -523,7 +532,7 @@
     if(phase==='gathered'){rumble();return;}
     if(phase==='rumble'){journal();return;}
     if(phase==='journal'){turnTo(titlePage);return;}
-    if(phase==='title'){turnTo(seaPage);return;}
+    if(phase==='title'){if(!titleReady)return;turnTo(seaPage);return;}
   }
   function sneeze(){
     phase='scatter';book.classList.add('scatter');
