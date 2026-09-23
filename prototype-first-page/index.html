@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#d2c7ae">
+<title>ふじた地球旅行記｜はじめの1ページ・試作</title>
+<style>
+:root{--ink:#49392e;--soft:#816e58;--paper:#fff8e7;--paper2:#f7ead0;--gold:#d9ae65;--ease:cubic-bezier(.2,.72,.15,1)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;-webkit-tap-highlight-color:transparent}body{font-family:"Hiragino Maru Gothic ProN","Yu Gothic",Meiryo,system-ui,sans-serif;color:var(--ink);background:#cbbd9c}button{font:inherit;cursor:pointer;color:inherit}button:focus-visible,[tabindex]:focus-visible{outline:3px solid #467e83;outline-offset:6px}button:disabled{cursor:default}
+.stage{min-height:100svh;min-height:100dvh;display:flex;justify-content:center;align-items:center;padding:clamp(12px,3vw,35px);position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 10%,#e8dcc0 0,#cbb998 65%,#a68f72 115%)}
+.stage:before{content:"";inset:0;position:absolute;pointer-events:none;opacity:.2;background:repeating-linear-gradient(88deg,transparent 0 16px,#765c3d18 17px,transparent 20px 42px),repeating-linear-gradient(1deg,transparent 0 78px,#f5e7cc55 80px,transparent 84px 160px)}
+.desk-shadow{position:absolute;top:50%;left:50%;width:min(94vw,1060px);height:min(77vh,750px);transform:translate(-50%,-44%);border-radius:35px;background:#6551383c;filter:blur(36px)}
+.book{width:min(960px,94vw);height:min(650px,86dvh);min-height:480px;max-height:700px;position:relative;isolation:isolate;filter:drop-shadow(0 18px 18px #4f3e315c)}
+.book:before{content:"";position:absolute;inset:7px 0 -7px 7px;background:#e3d0aa;border:1px solid #ad956d;border-radius:9px 15px 16px 10px;transform:rotate(.28deg);box-shadow:4px 5px 0 #bda785,7px 9px 1px #9f8566;pointer-events:none}
+.spread,.cover{position:absolute;inset:0;border-radius:8px 15px 16px 9px;overflow:hidden;backface-visibility:hidden}
+.spread{background:radial-gradient(ellipse at 22% 13%,#fffcf2 0,transparent 60%),repeating-radial-gradient(circle at 31% 47%,#9d7e3710 0 1px,transparent 1px 4px),linear-gradient(92deg,#efe0c0 0,#fff8e7 2.3%,#fff9eb 47%,#ddccac 49.8%,#f7ecd5 50.2%,#fffaeb 98%,#e6d3ad 100%);border:1px solid #bdab8e;box-shadow:inset 7px 0 15px #8b6a4129,inset -6px 0 11px #99805a20;display:grid;grid-template-columns:1fr 1fr;opacity:0;transform:scale(.985);transition:opacity .45s ease .25s,transform .65s ease .15s}
+.spread:after{content:"";position:absolute;inset:7px 49.8% 5px auto;width:1px;background:#b39b7454;box-shadow:2px 0 7px 5px #88704713;pointer-events:none}
+.book.open .spread{opacity:1;transform:scale(1)}
+.cover{display:block;width:52%;left:24%;right:auto;background:radial-gradient(ellipse at 55% 23%,#416c65 0,#234d51 52%,#17373f 100%);border:2px solid #d1b477;box-shadow:inset 0 0 0 8px #204447,inset 0 0 0 10px #b7a063a6,7px 6px 0 #153136,13px 8px 16px #2b2b266e;transform-origin:left center;z-index:7;transition:transform .85s var(--ease),opacity .28s linear .65s;cursor:pointer;touch-action:manipulation}
+.cover:hover .cover-hint,.cover:focus-visible .cover-hint{opacity:1}
+.book.open .cover{transform:perspective(1300px) rotateY(-112deg) translateX(-3%);opacity:0;pointer-events:none}
+.cover:before{content:"";position:absolute;inset:24px 19px;border:1px solid #d6b77a8a;pointer-events:none}
+.cover:after{content:"";position:absolute;inset:32px 27px;border:1px solid #d6b77a38;pointer-events:none}
+.cover-deco{position:absolute;inset:10% 9% 11%;width:82%;height:79%;overflow:visible}
+.cover-title{position:absolute;z-index:1;top:37%;left:8%;width:84%;text-align:center;color:#f7e9c9;text-shadow:0 2px 4px #142f2e6b;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-weight:600;font-size:clamp(19px,3.2vw,32px);letter-spacing:.13em;line-height:1.7}
+.cover-sub{font-size:clamp(10px,1.5vw,14px);letter-spacing:.24em;font-weight:400;display:block;margin-top:9px;color:#e6cc9c}
+.cover-hint{position:absolute;z-index:1;bottom:7%;width:100%;text-align:center;color:#efdfb7c9;font-size:12px;letter-spacing:.15em;opacity:.75;animation:breath 2.4s ease-in-out infinite}
+@keyframes breath{50%{opacity:.45;transform:translateY(-2px)}}
+/* The watercolor illustration is native SVG, with no network requests or external assets. */
+.picture-side{position:relative;min-width:0;overflow:hidden;margin:16px 8px 16px 16px;border-radius:3px 0 0 3px;background:radial-gradient(ellipse at 63% 25%,#e7e4d5a0,transparent 68%)}
+.illustration{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.paper-dust{position:absolute;inset:0;pointer-events:none;opacity:.7;background-image:radial-gradient(#967c5320 0.6px,transparent .8px);background-size:13px 13px;mix-blend-mode:multiply}
+#pencilTarget{cursor:pointer;transform-origin:50% 50%;animation:pencilTap 1.3s ease-in-out infinite;transform-box:fill-box}
+@keyframes pencilTap{0%,44%,100%{transform:rotate(-2deg) translateY(0)}49%{transform:rotate(4deg) translateY(5px)}55%{transform:rotate(-3deg) translateY(0)}60%{transform:rotate(4deg) translateY(5px)}}
+.book.hello #pencilTarget,.book.scatter #pencilTarget,.book.done #pencilTarget{animation:none}
+#pencilTarget .touch-zone{fill:transparent;stroke:transparent;stroke-width:80px;pointer-events:stroke}#pencilTarget:focus{outline:none}#pencilTarget:focus-visible{outline:3px solid #467e83;outline-offset:6px}
+.notebook-lines{opacity:.65}.notebook-ink{opacity:.25;transition:opacity .5s}.book.done .notebook-ink{opacity:.85}
+.paper{position:absolute;z-index:4;width:25%;height:18%;min-width:68px;min-height:62px;max-width:127px;max-height:110px;left:var(--x);top:var(--y);padding:5px;border:1px solid #d0bfa3;border-radius:2px 5px 4px 2px;transform:rotate(var(--r));transform-origin:center;background:linear-gradient(145deg,#fffdf0 2%,#f9edcf 100%);box-shadow:3px 5px 10px #513b2840,inset 2px 0 0 #fff;opacity:0;pointer-events:none;touch-action:manipulation;transition:filter .22s}
+.paper:before{content:"";position:absolute;inset:11% 11%;background:repeating-linear-gradient(0deg,transparent 0 17px,#baa98a8c 18px,transparent 19px);opacity:.65}
+.paper:after{content:"";position:absolute;top:16%;right:12%;width:18%;height:11%;border:1.5px solid #93a89b;border-radius:50%;transform:rotate(28deg);opacity:.7}
+.paper:nth-of-type(1){--x:1%;--y:12%;--r:-25deg}.paper:nth-of-type(2){--x:68%;--y:16%;--r:22deg}.paper:nth-of-type(3){--x:53%;--y:72%;--r:-12deg}
+.book.scatter .paper,.book.done .paper{opacity:1;pointer-events:auto;animation:fly .9s cubic-bezier(.16,.7,.3,1) both;animation-delay:var(--delay)}
+@keyframes fly{from{opacity:0;transform:translate(var(--in-x),var(--in-y)) rotate(-50deg) scale(.45)}55%{opacity:1}to{opacity:1;transform:translate(0,0) rotate(var(--r)) scale(1)}}
+.paper:active{filter:brightness(1.08)}.paper.gathered{opacity:0!important;pointer-events:none!important;animation:none!important}
+.scene-cue{position:absolute;z-index:4;bottom:4%;left:5%;right:5%;text-align:center;font-size:clamp(11px,1.5vw,13px);letter-spacing:.09em;color:#76674e;pointer-events:none;opacity:.8;transition:opacity .4s}
+.book.scatter .scene-cue,.book.done .scene-cue{opacity:0}
+.word-sneeze{position:absolute;z-index:3;top:21%;left:21%;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-weight:700;color:#a46a46;font-size:clamp(20px,3vw,33px);white-space:nowrap;opacity:0;transform:rotate(-12deg) scale(.5);pointer-events:none}
+.book.scatter .word-sneeze{animation:sneeze .7s cubic-bezier(.1,.8,.25,1) .05s both}@keyframes sneeze{0%{opacity:0;transform:rotate(-18deg) scale(.3)}40%{opacity:1;transform:rotate(-12deg) scale(1.17)}90%{opacity:1;transform:rotate(-12deg) scale(1)}100%{opacity:0;transform:rotate(-12deg) scale(1)}}
+.text-side{position:relative;min-width:0;display:flex;flex-direction:column;padding:clamp(26px,4.7vw,55px) clamp(24px,4vw,46px) 24px;justify-content:center;gap:0}
+.chapter{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:clamp(12px,1.6vw,16px);letter-spacing:.25em;color:#9e8966;margin-bottom:clamp(18px,4vh,31px)}
+.prose{min-height:190px;display:flex;justify-content:center;flex-direction:column;gap:14px;font-size:clamp(16px,2.12vw,21px);line-height:2.03;letter-spacing:.045em;font-weight:500;white-space:pre-wrap}
+.line{margin:0;animation:ink .55s ease both}.line.dialogue{padding-left:1.2em;text-indent:-1.2em}.line .who{font-size:.7em;letter-spacing:.1em;color:#9b7758;margin-right:.5em;white-space:nowrap}.line.narration{font-family:"Hiragino Mincho ProN","Yu Mincho",serif}.line.call{color:#8e634c;font-size:1.08em;font-weight:700}
+@keyframes ink{from{opacity:0;transform:translateY(6px);filter:blur(3px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+.page-note{min-height:45px;margin-top:22px;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:clamp(11px,1.46vw,14px);line-height:1.85;color:#967f61;letter-spacing:.07em;opacity:.85;transition:opacity .3s;white-space:pre-wrap}
+.bookmark{position:absolute;top:-1px;right:27px;width:19px;height:75px;background:#b57a62;clip-path:polygon(0 0,100% 0,100% 100%,50% 77%,0 100%);opacity:.69;box-shadow:2px 1px 6px #6b4a3432}
+.bottom-flourish{position:absolute;bottom:16px;right:27px;color:#b49b72;font-family:Georgia,serif;font-size:20px;letter-spacing:.1em;opacity:.63;pointer-events:none}
+.finished-note{opacity:0;font-family:"Hiragino Mincho ProN","Yu Mincho",serif;text-align:center;font-size:13px;color:#8e7556;transform:translateY(5px);transition:opacity .5s,transform .5s}.book.done .finished-note{opacity:1;transform:none}
+.mobile-replay{display:none}
+@media(max-width:650px){.stage{padding:10px 12px 18px;align-items:center}.desk-shadow{width:94vw;height:94vh}.book{width:min(460px,93vw);height:min(790px,91dvh);min-height:460px}.book:before,.spread{border-radius:6px 11px 12px 7px}.spread{display:flex;flex-direction:column;background:radial-gradient(ellipse at 20% 9%,#fffdf4 0,transparent 65%),repeating-radial-gradient(circle at 34% 44%,#9d7e3710 0 1px,transparent 1px 4px),linear-gradient(90deg,#eadeca,#fffaec 3%,#fff9eb 97%,#e9d6b5)}.spread:after{display:none}.cover{width:100%;left:0}.cover-title{font-size:clamp(22px,6.1vw,34px);top:39%}.cover-hint{bottom:10%;font-size:13px}.cover-deco{height:74%;top:12%}.picture-side{flex:0 0 48%;margin:9px 11px 0 11px;border-radius:4px;background:radial-gradient(ellipse at 55% 20%,#dfdac88c,transparent 70%)}.illustration{top:0}.text-side{flex:1;justify-content:flex-start;padding:9px 25px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;scrollbar-width:none}.text-side::-webkit-scrollbar{display:none}.chapter{font-size:11px;margin:4px 0 8px}.prose{min-height:unset;gap:7px;justify-content:flex-start;font-size:clamp(16px,4.25vw,19px);line-height:1.83}.page-note{margin-top:12px;min-height:20px;font-size:11px}.scene-cue{font-size:11px;bottom:2%}.paper{width:24%;height:20%;min-width:52px;min-height:48px}.bookmark{right:20px;height:41px;width:13px}.bottom-flourish{bottom:9px;right:19px;font-size:13px}.finished-note{font-size:11px}}
+@media(max-width:359px){.book{height:min(750px,92dvh)}.picture-side{flex-basis:46%}.prose{font-size:14px}.chapter{margin-bottom:6px}.page-note{line-height:1.5}.text-side{padding-left:20px;padding-right:20px}}
+@media(max-height:650px) and (max-width:650px){.book{height:93dvh;min-height:400px}.picture-side{flex-basis:42%}.chapter{margin:1px 0 3px}.prose{font-size:13px;line-height:1.55;gap:5px}.page-note{margin-top:5px;line-height:1.3}.text-side{padding-top:3px}.scene-cue{font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="desk-shadow" aria-hidden="true"></div>
+  <div class="book" id="book">
+    <article class="spread" aria-label="ふじた地球旅行記の最初のページ" id="spread" aria-hidden="true">
+      <div class="picture-side" id="scene">
+        <svg class="illustration" viewBox="0 0 620 650" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="窓の外に月が見える小さな書斎。机の上には古びた旅の本と鉛筆、ふじたの帽子がある。">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2=".2" y2="1"><stop stop-color="#7e9eaa"/><stop offset="1" stop-color="#d5ddcc"/></linearGradient>
+            <linearGradient id="wood" x1="0" y1="0" x2="1" y2=".6"><stop stop-color="#c0a781"/><stop offset=".52" stop-color="#e2cba1"/><stop offset="1" stop-color="#b99d74"/></linearGradient>
+            <linearGradient id="hat" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#c2aa7c"/><stop offset=".72" stop-color="#927b57"/><stop offset="1" stop-color="#665d4b"/></linearGradient>
+            <filter id="bleed"><feGaussianBlur stdDeviation="9"/></filter>
+          </defs>
+          <!-- watercolor-like window and atmosphere -->
+          <path d="M65 35 Q145 10 223 42 L222 296 Q155 278 61 293Z" fill="#dfd2af" opacity=".48"/>
+          <path d="M85 51 Q146 41 207 49 L208 267 Q146 274 82 268Z" fill="url(#sky)" opacity=".87"/>
+          <ellipse cx="165" cy="101" rx="32" ry="31" fill="#fdf2cf" opacity=".36" filter="url(#bleed)"/>
+          <circle cx="166" cy="103" r="24" fill="#fef6dc" opacity=".89"/>
+          <path d="M83 221 Q122 196 159 221 Q186 205 206 228 L208 268 L82 267Z" fill="#93a59b" opacity=".47"/>
+          <path d="M146 47 L144 274 M84 157 L207 157" stroke="#e3d6bd" stroke-width="8" opacity=".94"/>
+          <path d="M72 37 Q146 26 219 38 L219 284 Q141 276 72 287Z" fill="none" stroke="#b49a72" stroke-width="8" opacity=".68"/>
+          <g fill="#fff7dc" opacity=".75"><circle cx="109" cy="83" r="1.5"/><circle cx="192" cy="185" r="1.7"/><circle cx="107" cy="186" r="1.1"/><circle cx="187" cy="64" r="1.2"/></g>
+          <!-- ink bottle and desk miscellany -->
+          <path d="M44 357 Q106 339 174 358 L160 451 Q93 479 42 438Z" fill="#b4a583" opacity=".22" filter="url(#bleed)"/>
+          <path d="M52 312 Q62 294 78 297 L107 313 L106 363 Q79 374 51 361Z" fill="#536166" opacity=".78"/>
+          <path d="M60 296 L101 297 L99 313 L60 311Z" fill="#988363"/><path d="M69 281 L92 281 L93 296 L68 296Z" fill="#544f49"/>
+          <path d="M56 341 Q77 350 103 339" stroke="#d4d6c8" stroke-width="2" fill="none" opacity=".72"/>
+          <!-- desk -->
+          <path d="M0 405 Q154 388 314 400 Q482 388 620 413 L620 650 L0 650Z" fill="url(#wood)"/>
+          <path d="M0 405 Q253 414 620 407" fill="none" stroke="#a58b64" stroke-width="7" opacity=".55"/>
+          <path d="M22 497 Q235 472 588 504 M49 571 Q310 539 582 566 M77 620 Q301 600 598 613" stroke="#8d724e" stroke-width="2" opacity=".18" fill="none"/>
+          <ellipse cx="342" cy="483" rx="219" ry="90" fill="#826a4c" opacity=".18" filter="url(#bleed)"/>
+          <!-- the handmade book -->
+          <path d="M148 416 Q231 399 332 429 Q438 401 530 419 L515 548 Q421 527 332 559 Q237 530 159 551Z" fill="#a4875b" opacity=".54"/>
+          <path d="M157 407 Q244 390 331 421 Q424 387 516 407 L509 537 Q418 511 330 550 Q244 518 160 540Z" fill="#fff6de" stroke="#bfa980" stroke-width="2"/>
+          <path d="M331 423 Q333 483 330 551" stroke="#a4906c" stroke-width="5" fill="none" opacity=".5"/>
+          <path d="M176 423 Q239 412 308 434 M177 443 Q237 434 307 452 M176 461 Q233 453 305 470 M177 480 Q237 468 305 490 M178 502 Q246 490 307 510" class="notebook-lines" fill="none" stroke="#bca98c" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M349 440 Q421 414 493 424 M351 459 Q414 436 494 442 M354 482 Q420 451 493 464" class="notebook-lines" fill="none" stroke="#bca98c" stroke-width="2.2" stroke-linecap="round"/>
+          <g class="notebook-ink"><path d="M357 499 Q368 476 379 500 Q394 523 410 489 Q424 476 438 504 Q459 475 480 494" fill="none" stroke="#767d69" stroke-width="3" stroke-linecap="round"/><path d="M357 515 Q408 500 472 514" fill="none" stroke="#77775f" stroke-width="2"/></g>
+          <!-- hat / the author remains unseen -->
+          <ellipse cx="442" cy="362" rx="146" ry="23" fill="#6a5948" opacity=".15" filter="url(#bleed)"/>
+          <path d="M286 363 Q351 334 419 345 Q500 338 561 359 Q556 383 428 391 Q312 392 286 363Z" fill="#8b805f" opacity=".93" stroke="#746950" stroke-width="2"/>
+          <path d="M344 354 Q345 279 375 259 Q413 242 458 256 Q500 259 511 350 Q456 375 344 354Z" fill="url(#hat)" stroke="#74634c" stroke-width="2"/>
+          <path d="M349 330 Q424 345 503 326 L508 350 Q421 365 345 353Z" fill="#516d6b" opacity=".85"/>
+          <path d="M369 271 Q391 253 425 255" stroke="#eee0b1" stroke-width="5" opacity=".28" fill="none" stroke-linecap="round"/>
+          <!-- pencil with an intentional large tap area -->
+          <g id="pencilTarget" role="button" tabindex="0" aria-label="とんとん鳴っている鉛筆に触れる">
+            <path class="touch-zone" d="M260 174 L345 363"/>
+            <g transform="rotate(-25 298 269)">
+              <path d="M287 178 L305 178 L306 345 L296 363 L286 345Z" fill="#ca9750" stroke="#906843" stroke-width="2.5"/>
+              <path d="M293 179 L298 345" stroke="#f8dba0" stroke-width="4" opacity=".7"/>
+              <path d="M286 344 L296 365 L307 344Z" fill="#e5cfaa"/>
+              <path d="M293 356 L298 365 L300 355Z" fill="#504239"/>
+              <path d="M286 181 L306 181 L305 196 L287 196Z" fill="#718f8e"/>
+              <path d="M286 172 L306 172 L306 182 L286 182Z" fill="#be7c6c"/>
+            </g>
+          </g>
+          <path d="M274 200 Q247 192 254 174 M320 166 Q339 150 346 160" stroke="#a08358" stroke-width="3" stroke-linecap="round" fill="none" opacity=".65"/>
+          <!-- pinches of ink -->
+          <path d="M543 503 Q552 493 560 503 M540 519 Q556 510 564 522" fill="none" stroke="#746e5f" stroke-width="2" opacity=".45"/>
+        </svg>
+        <div class="paper-dust" aria-hidden="true"></div>
+        <div class="word-sneeze" aria-hidden="true">はっくしょん！</div>
+        <button class="paper" data-paper="0" style="--delay:.02s;--in-x:160%;--in-y:210%" aria-label="左上に飛んだ紙を拾う" disabled></button>
+        <button class="paper" data-paper="1" style="--delay:.13s;--in-x:-110%;--in-y:190%" aria-label="右上に飛んだ紙を拾う" disabled></button>
+        <button class="paper" data-paper="2" style="--delay:.23s;--in-x:-60%;--in-y:-180%" aria-label="右下に飛んだ紙を拾う" disabled></button>
+        <div class="scene-cue" id="sceneCue">とん、とん……　えんぴつに ふれてみよう</div>
+      </div>
+      <section class="text-side" aria-label="物語の文章">
+        <div class="bookmark" aria-hidden="true"></div>
+        <div class="chapter">はじめの ページ</div>
+        <div class="prose" id="prose" aria-live="polite" aria-atomic="true"></div>
+        <div class="page-note" id="pageNote">えんぴつが、なにかを かんがえているみたい。</div>
+        <div class="finished-note">— このページの おしまい —</div>
+        <div class="bottom-flourish" aria-hidden="true">❧</div>
+      </section>
+    </article>
+    <button class="cover" id="cover" aria-label="本の表紙を開く">
+      <svg class="cover-deco" viewBox="0 0 340 460" aria-hidden="true">
+        <g fill="none" stroke="#ddbd79" stroke-width="1.1" opacity=".58"><path d="M53 44 Q170 3 286 44 M50 415 Q170 456 290 415"/><path d="M40 42 Q170 -10 300 42 L300 417 Q170 476 40 417Z"/><path d="M51 45 Q170 13 288 46 L288 414 Q171 450 51 414Z"/></g>
+        <g fill="#f7e6b1"><circle cx="71" cy="101" r="1.8"/><circle cx="252" cy="129" r="2.6"/><circle cx="206" cy="70" r="1.4"/><circle cx="104" cy="368" r="2"/><circle cx="261" cy="330" r="1.4"/><path d="M92 142 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3Z" opacity=".7"/><path d="M236 375 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3Z" opacity=".7"/></g>
+        <path d="M171 64 a61 61 0 1 0 28 116 a70 70 0 1 1 -28 -116" fill="#e8d399" opacity=".82" transform="translate(0 -67)"/>
+        <path d="M91 306 Q163 289 230 316 Q205 329 164 327 Q121 328 91 306Z" fill="#d2b779" opacity=".6" transform="translate(0 95)"/>
+        <path d="M154 275 Q156 235 168 222 Q185 223 191 273 L209 286 L205 307 Q168 324 133 301 L131 286Z" fill="#ddc389" opacity=".7" transform="translate(0 95)"/>
+        <path d="M170 274 Q175 256 173 246" stroke="#3b5d5d" stroke-width="3" fill="none" opacity=".6" transform="translate(0 95)"/>
+      </svg>
+      <div class="cover-title">ふじた<br>地球旅行記<span class="cover-sub">さいごの、しろいページ</span></div>
+      <div class="cover-hint">おして、ほんを ひらく　›</div>
+    </button>
+  </div>
+</main>
+<script>
+(()=>{
+  'use strict';
+  const book=document.getElementById('book');
+  const cover=document.getElementById('cover');
+  const spread=document.getElementById('spread');
+  const prose=document.getElementById('prose');
+  const note=document.getElementById('pageNote');
+  const pencil=document.getElementById('pencilTarget');
+  const cue=document.getElementById('sceneCue');
+  const scene=document.getElementById('scene');
+  const papers=[...document.querySelectorAll('.paper')];
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let phase='cover',found=0,sequence=0;
+  const delay=ms=>new Promise(resolve=>setTimeout(resolve,reduced?Math.min(ms,30):ms));
+  function setLines(lines){
+    prose.replaceChildren();
+    lines.forEach((entry,i)=>{
+      const p=document.createElement('p');
+      p.className='line '+(entry.kind||'narration');
+      p.style.animationDelay=`${i*95}ms`;
+      if(entry.who){const w=document.createElement('span');w.className='who';w.textContent=entry.who+'　';p.append(w);}
+      p.append(document.createTextNode(entry.text));prose.append(p);
+    });
+  }
+  const L=(text,who)=>({text,who,kind:who?'dialogue':'narration'});
+  function openBook(){if(phase!=='cover')return;phase='intro';book.classList.add('open');spread.setAttribute('aria-hidden','false');cover.disabled=true;setLines([L('とん、とん、とん。\nえんぴつで、頭をたたいている人がいます。')]);}
+  async function greet(){
+    if(phase!=='intro')return;
+    phase='hello';book.classList.add('hello');pencil.setAttribute('aria-disabled','true');
+    cue.textContent='';
+    setLines([L('あれ。きみ、いつからそこに？','ふじた'),L('私は、ふじた。本をつくっているんです。','ふじた')]);
+    note.textContent='ふじたが、こちらに きづきました。';
+    const id=++sequence;
+    await delay(3000);if(id!==sequence)return;
+    setLines([L('思い出すと、あれも、これも、書きたくなって……','ふじた'),L('……は、は……','ふじた')]);
+    note.textContent='……あれ？';
+    await delay(1650);if(id!==sequence)return;
+    sneeze();
+  }
+  function sneeze(){
+    phase='scatter';book.classList.add('scatter');
+    setLines([L('はっくしょん！','ふじた'),L('びゅわっ！\n三枚の紙が、ひらひら舞いました。'),L('ああっ。今のくしゃみは、本には書かないでください。','ふじた'),L('いっしょに、拾ってもらえますか？','ふじた')]);
+    note.textContent='ひらひら とんでいった かみを さわってみよう。';
+    papers.forEach(p=>p.disabled=false);
+  }
+  function collect(paper){
+    if(phase!=='scatter'||paper.disabled)return;
+    paper.disabled=true;
+    const a=paper.getBoundingClientRect();const target=scene.getBoundingClientRect();
+    const endX=target.left+target.width*.52,endY=target.top+target.height*.78;
+    const dx=endX-(a.left+a.width/2),dy=endY-(a.top+a.height/2);
+    const original=getComputedStyle(paper).transform;
+    if(!reduced&&paper.animate){paper.animate([{transform:original==='none'?'rotate(-8deg)':original,opacity:1},{transform:`translate(${dx*.47}px,${dy*.5-24}px) rotate(18deg) scale(.72)`,opacity:1,offset:.6},{transform:`translate(${dx}px,${dy}px) rotate(0deg) scale(.3)`,opacity:0}],{duration:690,easing:'cubic-bezier(.22,.76,.14,1)',fill:'forwards'}).onfinish=()=>paper.classList.add('gathered');}
+    else paper.classList.add('gathered');
+    found++;
+    if(found===1)note.textContent='ふじた「おおっ！ ひとまい、もどってきました！」';
+    if(found===2){note.textContent='ふじた「あと、ひとまい……あっ、そっちへ！」';const last=papers.find(p=>!p.disabled);if(last&&!reduced){last.animate([{transform:'rotate(-12deg) translateX(0)'},{transform:'rotate(9deg) translateX(-12px)'},{transform:'rotate(-12deg) translateX(0)'}],{duration:620,iterations:2});}}
+    if(found===3){phase='finishing';note.textContent='';setTimeout(finish,reduced?30:850);}
+  }
+  function finish(){phase='done';book.classList.add('done');setLines([L('ありがとう。みんな、もどってきました。','ふじた'),L('……でも、今のくしゃみは、本には書かないでくださいね。','ふじた')]);note.textContent='';}
+  cover.addEventListener('click',openBook);
+  pencil.addEventListener('click',greet);
+  pencil.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();greet();}});
+  papers.forEach(p=>p.addEventListener('click',()=>collect(p)));
+})();
+</script>
+</body>
+</html>
