@@ -180,6 +180,45 @@
 }
 @media(prefers-reduced-motion:reduce){.book.turning .page-turn{animation-duration:.01ms!important}}
 
+
+/* 2026-09-23: actual illustrated page turns. Reuse the cover's timing,
+   transform angle and easing, instead of animating a blank half-leaf. */
+.page-turn{
+  inset:0!important;
+  background:#fff9e9!important;
+  box-shadow:7px 5px 14px #6b52332b!important;
+  border-radius:6px 11px 12px 7px!important;
+  transform:perspective(1400px) rotateY(0deg)!important;
+  transform-origin:left center!important;
+  transform-style:flat!important;-webkit-transform-style:flat!important;
+  backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;
+  transition:transform .86s var(--ease),opacity .2s linear .68s!important;
+  opacity:1;visibility:hidden;clip-path:none!important;
+}
+.page-turn::before,.page-turn::after{content:none!important;display:none!important}
+.book.turning .page-turn{
+  visibility:visible;animation:none!important;
+  transform:perspective(1400px) rotateY(-110deg)!important;
+  opacity:0;
+}
+.page-turn>.turn-face{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  margin:0!important;opacity:1!important;transform:none!important;transition:none!important;
+  pointer-events:none!important;
+  backface-visibility:hidden!important;-webkit-backface-visibility:hidden!important;
+  background:#fff9e9;
+}
+.book.turning .page-turn>.turn-face{pointer-events:none!important}
+@media(max-width:650px){
+  .picture-side{flex:0 0 46%;margin:7px 8px 0;border-radius:4px}
+  .text-side{min-height:0;padding:9px 21px calc(14px + env(safe-area-inset-bottom));overflow-y:auto}
+  .prose{font-size:clamp(17px,4.25vw,19px);line-height:1.72;gap:7px}
+  .page-note{font-size:clamp(12px,3vw,14px);line-height:1.6;margin-top:10px}
+}
+@media(max-width:359px){.picture-side{flex-basis:44%}.text-side{padding:7px 18px 12px}.prose{font-size:16px;line-height:1.64}}
+@media(max-height:650px) and (max-width:650px){.picture-side{flex-basis:43%}.text-side{padding-top:6px}.prose{font-size:clamp(15px,4vw,17px);line-height:1.58}}
+@media(prefers-reduced-motion:reduce){.book.turning .page-turn{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -358,9 +397,41 @@
     if(turning)return;
     turning=true;
     if(reduced){callback();turning=false;return;}
+    // The opening cover turns with rotateY(-110deg). Turn an actual picture
+    // of the CURRENT page with the same animation, revealing the next page.
+    // A blank CSS pseudo-page caused the abrupt white flash in Safari.
+    const leaf=spread.cloneNode(true);
+    leaf.removeAttribute('id');
+    leaf.classList.add('turn-face');
+    leaf.setAttribute('aria-hidden','true');
+    leaf.querySelector('.page-turn')?.remove();
+    leaf.querySelectorAll('[id]').forEach(node=>node.removeAttribute('id'));
+    // Preserve the outgoing scene's appearance when the underlying book
+    // changes its page-* class halfway through the turn.
+    const frozen='.new-title-scene,.new-rocket-scene,.illustration,.fujita-glasses,.scene-cue,.prose,.chapter,.journal-illustration,.text-side,.finished-note,.close-book,.rumble-word';
+    const originals=[...spread.querySelectorAll(frozen)];
+    const copies=[...leaf.querySelectorAll(frozen)];
+    originals.forEach((node,i)=>{
+      const computed=getComputedStyle(node),copy=copies[i];
+      if(!copy)return;
+      ['display','visibility','opacity','transform','text-align','font-size','line-height','background'].forEach(prop=>{
+        copy.style.setProperty(prop,computed.getPropertyValue(prop));
+      });
+    });
+    const pageTurn=document.querySelector('.page-turn');
+    pageTurn.replaceChildren(leaf);
+    const frozenText=leaf.querySelector('.text-side');
+    if(frozenText)frozenText.scrollTop=textSide.scrollTop;
+    // Fix the initial style before entering the turning state, so WebKit
+    // actually interpolates the same transition used by .cover.
+    void pageTurn.offsetWidth;
     book.classList.add('turning');
-    setTimeout(callback,360);
-    setTimeout(()=>{book.classList.remove('turning');turning=false;},760);
+    setTimeout(callback,180);
+    setTimeout(()=>{
+      book.classList.remove('turning');
+      pageTurn.replaceChildren();
+      turning=false;
+    },920);
   }
   function display(values,tip='',next=true){setLines(values);hint(tip,next);}
   function rumble(){
